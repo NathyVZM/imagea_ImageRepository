@@ -1,0 +1,43 @@
+/* register-login.css */
+
+#imagea-logo {
+    width: 5%;
+    float: left;
+}
+
+#imagea-title {
+    width: 8%;
+}
+
+/** MISCELANEO */
+
+/* Uni Neue */
+@font-face {
+    font-family: "uni_neue";
+    src: url("../font/Uni_Neue/UniNeue-Light.otf");
+}
+
+/* Hind Madurai */
+@font-face {
+    font-family: "hind_madurai";
+    src: url("../font/Hind_Madurai/HindMadurai-Regular.ttf");
+}
+
+/* Raleway */
+@font-face {
+    font-family: "raleway";
+    src: url("../font/Raleway/Raleway-VariableFont_wght.ttf");
+}
+
+h1 {
+    font-family: uni_neue;
+}
+
+h2, h3, a {
+    font-family: hind_madurai;
+}
+
+p, ul, li {
+    font-family: raleway;
+}
+

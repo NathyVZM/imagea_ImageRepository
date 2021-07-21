@@ -1,0 +1,17 @@
+<!--login.html-->
+
+{% extends 'base/register-login.html' %}
+
+{% block content %}
+{% from 'macro.html' import renderField %}
+<form action="" method="POST" id="loginForm">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    {{ renderField(form.username) }}
+    {{ renderField(form.password) }}
+
+    <button type="submit">Log in</button>
+</form>
+<div>
+    <p>Not a user yet? <a href="/register">Register</a></p>
+</div>
+{% endblock %}

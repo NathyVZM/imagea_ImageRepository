@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="../../static/css/register-login.css">
+    <link rel="icon" href="../../static/icon/imagea_logo2.svg">
+</head>
+<body>
+    <header></header>
+    <main>
+        <div id="izquierda">
+            <h1>Register or Log in and start creating your own images repositories</h1>
+            <img src="../../static/icon/imagea_logo2.svg" alt="imagea Logo" id="imagea-logo">
+            <!-- <img src="../../static/icon/imagea_title1.svg" alt="imagea Title" id="imagea-title"> -->
+            <h1>imagea</h1>
+        </div>
+        <div id="derecha">
+            <div>
+                <h2>Welcome to imagea</h2>
+                <p>Create repositories to organize your gallery</p>
+            </div>
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    <footer></footer>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+{% from 'macro.html' import renderField %}
+
+<div class="profile-header">
+    <div>
+        <img src="../static/icon/userIcon.svg" alt="User Icon" id="user-icon">
+        <h1>{{ name }} {{ lastname }}</h1>
+        <h2>{{ username }}</h2>
+    </div>
+    <div>
+        <button type="button" id="add-image">Add image</button>
+        <button type="button" id="create-rep">Create repository</button>
+    </div>
+</div>
+
+<div id="create-rep-form">
+    <img src="../static/icon/closePurple.svg" alt="" width="20" class="close" id="close">
+    <h2>Create repository</h2>
+
+    <form action="/repository/create" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label for="">
+            <img src="../static/icon/editPencil.svg" alt="">
+            Repository name
+        </label>
+        {{ renderField(form.name) }}
+
+        <button type="submit" id="create-button">Create</button>
+    </form>
+</div>
+
+<div></div>
+{% endblock %}

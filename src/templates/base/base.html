@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="icon" href="../../static/icon/imagea_logo2.svg">
+    <link rel="stylesheet" href="../../static/css/base.css">
+</head>
+<body>
+    <header>
+        <div id="primero">
+            <img src="../../static/icon/imagea_logo2.svg" alt="imagea Logo" id="imagea-logo">
+            <!-- <img src="../../static/icon/imagea_title1.svg" alt="imagea Title" id="imagea-title"> -->
+            <h1>imagea</h1>
+        </div>
+        <div id="segundo">
+            <a href="/home">Home</a>
+            <form action="">
+                <input type="text" name="search" placeholder="Search by tags">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <div id="tercero">
+            <img src="../../static/icon/arrowDown.svg" alt="Arrow Down" id="arrow" title="Display panel">
+            <a href="/repository"><img src="../../static/icon/userIcon.svg" alt="User Icon" title="Repositories"></a>
+            <h2>{{ name }}</h2>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    
+    <script src="../../static/js/create_rep.js"></script>
+    <script src="../../static/js/open_close.js"></script>
+</body>
+</html>
