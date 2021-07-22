@@ -75,7 +75,8 @@ def login():
             print('username or password not valid')
 
     title = 'imagea - Login'
-    return render_template('login.html', title=title, form=loginForm)
+    href = '../static/icon/imagea_logo2.svg'
+    return render_template('login.html', title=title, form=loginForm, href=href)
 
 
 # * LOGOUT
