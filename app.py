@@ -53,6 +53,10 @@ def register():
     title = 'imagea - Register'
     return render_template('register.html', title=title, form=registerForm)
 
+#! PRUEBA
+async def async_login(username):
+    await User.query.filter_by(username=username).first()
+
 
 # * LOGIN
 @app.route('/login', methods=['GET', 'POST'])
@@ -64,7 +68,8 @@ async def login():
     if request.method == 'POST' and loginForm.validate():
         username = loginForm.username.data
         password = loginForm.password.data
-        user = await User.query.filter_by(username=username).first()
+        # user = User.query.filter_by(username=username).first()
+        user = await async_login(username)
 
         if user is not None and user.verifyPassword(password):
             print(f'Welcome {username}')
@@ -102,7 +107,6 @@ async def home():
         setattr(image, 'username', user.username)
 
         if rep.username != username:
-            # images_home.append(Image(image.repository, image.name, image.description, image.file, image.tags))
             images_home.append(image)
         else:
             continue
