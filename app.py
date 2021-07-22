@@ -188,14 +188,14 @@ def image_create():
     rel = os.path.relpath(abs)
     print(rel)
 
-    # image = Image(request.form['rep'], request.form['name'], request.form['description'],
-    # rel, tags)
+    image = Image(request.form['rep'], request.form['name'], request.form['description'],
+    file.filename, tags)
     
-    # print(image.repository)
-    # print(image.file)
+    print(image.repository)
+    print(image.file)
 
-    # db.session.add(image)
-    # db.session.commit()
+    db.session.add(image)
+    db.session.commit()
 
     return redirect(url_for('repository'))
 
