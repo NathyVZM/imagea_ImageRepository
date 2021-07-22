@@ -11,7 +11,7 @@ from sqlalchemy.sql.expression import func
 from models import db, User, Repository, Image
 
 app = Flask(__name__, static_folder='static/', static_url_path='/', template_folder='templates')
-app.config.from_object(DevelopmentConfig)
+app.config.from_object(ProductionConfig)
 csrf = CSRFProtect(app)
 
 
