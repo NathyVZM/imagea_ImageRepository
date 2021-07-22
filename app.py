@@ -104,16 +104,16 @@ def logout():
 # * HOME
 @app.route('/home')
 async def home():
-    images = await Image.query.order_by(func.random()).all()
+    images = Image.query.order_by(func.random()).all()
     # images = await async_home_image()
     images_home = []
 
     username = session['username']
     
     for image in images:
-        rep = await Repository.query.filter_by(id=image.repository).first()
+        rep = Repository.query.filter_by(id=image.repository).first()
         # rep = await async_home_rep(image.repository)
-        user = await User.query.filter_by(username=rep.username).first()
+        user = User.query.filter_by(username=rep.username).first()
         # user = await async_home_user(rep.username)
 
         setattr(image, 'username', user.username)
