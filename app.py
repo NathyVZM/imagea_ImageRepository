@@ -53,18 +53,18 @@ def register():
     title = 'imagea - Register'
     return render_template('register.html', title=title, form=registerForm)
 
-#! PRUEBA
-async def async_login(username):
-    await User.query.filter_by(username=username).first()
+# #! PRUEBA
+# async def async_login(username):
+#     await User.query.filter_by(username=username).first()
 
-async def async_home_image():
-    await Image.query.order_by(func.random()).all()
+# async def async_home_image():
+#     await Image.query.order_by(func.random()).all()
 
-async def async_home_rep(rep):
-    await Repository.query.filter_by(id=rep).first()
+# async def async_home_rep(rep):
+#     await Repository.query.filter_by(id=rep).first()
 
-async def async_home_user(username):
-    await User.query.filter_by(username=username).first()
+# async def async_home_user(username):
+#     await User.query.filter_by(username=username).first()
 
 
 # * LOGIN
@@ -77,8 +77,8 @@ async def login():
     if request.method == 'POST' and loginForm.validate():
         username = loginForm.username.data
         password = loginForm.password.data
-        # user = User.query.filter_by(username=username).first()
-        user = await async_login(username)
+        user = User.query.filter_by(username=username).first()
+        # user = await async_login(username)
 
         if user is not None and user.verifyPassword(password):
             print(f'Welcome {username}')
@@ -104,17 +104,17 @@ def logout():
 # * HOME
 @app.route('/home')
 async def home():
-    # images = await Image.query.order_by(func.random()).all()
-    images = await async_home_image()
+    images = await Image.query.order_by(func.random()).all()
+    # images = await async_home_image()
     images_home = []
 
     username = session['username']
     
     for image in images:
-        # rep = await Repository.query.filter_by(id=image.repository).first()
-        rep = await async_home_rep(image.repository)
-        # user = await User.query.filter_by(username=rep.username).first()
-        user = await async_home_user(rep.username)
+        rep = await Repository.query.filter_by(id=image.repository).first()
+        # rep = await async_home_rep(image.repository)
+        user = await User.query.filter_by(username=rep.username).first()
+        # user = await async_home_user(rep.username)
 
         setattr(image, 'username', user.username)
 
