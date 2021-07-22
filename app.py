@@ -6,7 +6,6 @@ from config import *
 from forms import *
 from flask_wtf.csrf import CSRFProtect
 import os
-import asyncio
 from sqlalchemy.sql.expression import func
 
 from models import db, User, Repository, Image
