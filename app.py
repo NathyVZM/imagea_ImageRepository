@@ -57,6 +57,15 @@ def register():
 async def async_login(username):
     await User.query.filter_by(username=username).first()
 
+async def async_home_image():
+    await Image.query.order_by(func.random()).all()
+
+async def async_home_rep(rep):
+    await Repository.query.filter_by(id=rep).first()
+
+async def async_home_user(username):
+    await User.query.filter_by(username=username).first()
+
 
 # * LOGIN
 @app.route('/login', methods=['GET', 'POST'])
@@ -95,14 +104,17 @@ def logout():
 # * HOME
 @app.route('/home')
 async def home():
-    images = await Image.query.order_by(func.random()).all()
+    # images = await Image.query.order_by(func.random()).all()
+    images = await async_home_image()
     images_home = []
 
     username = session['username']
     
     for image in images:
-        rep = await Repository.query.filter_by(id=image.repository).first()
-        user = await User.query.filter_by(username=rep.username).first()
+        # rep = await Repository.query.filter_by(id=image.repository).first()
+        rep = await async_home_rep(image.repository)
+        # user = await User.query.filter_by(username=rep.username).first()
+        user = await async_home_user(rep.username)
 
         setattr(image, 'username', user.username)
 
