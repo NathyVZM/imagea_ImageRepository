@@ -34,24 +34,24 @@ def index():
 # * REGISTER
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    return 'Hola Mundo'
-    # registerForm = RegisterForm(request.form)
-    # print(registerForm.name.data)
-    # print(registerForm.lastname.data)
-    # print(registerForm.username.data)
-    # print(registerForm.password.data)
+    # return 'Hola Mundo'
+    registerForm = RegisterForm(request.form)
+    print(registerForm.name.data)
+    print(registerForm.lastname.data)
+    print(registerForm.username.data)
+    print(registerForm.password.data)
 
-    # if request.method == 'POST' and registerForm.validate():
-    #     user = User(registerForm.name.data, registerForm.lastname.data,
-    #                 registerForm.username.data, registerForm.password.data)
+    if request.method == 'POST' and registerForm.validate():
+        user = User(registerForm.name.data, registerForm.lastname.data,
+                    registerForm.username.data, registerForm.password.data)
 
-    #     db.session.add(user)
-    #     db.session.commit()
+        db.session.add(user)
+        db.session.commit()
 
-    #     return redirect(url_for('login'))
+        return redirect(url_for('login'))
 
-    # title = 'imagea - Register'
-    # return render_template('register.html', title=title, form=registerForm)
+    title = 'imagea - Register'
+    return render_template('register.html', title=title, form=registerForm)
 
 
 # * LOGIN
