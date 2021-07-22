@@ -75,31 +75,20 @@
     </form>
 </div>
 
-{# REP-BOX #}
-<div class="rep-box">
-    {% if reps %}
-            {% for rep in reps %}
-            <div class="fullrep">
-                <div>
-                    <a href="/repository/{{ rep.id }}"><img src="../static/icon/repFolder.svg" alt=""></a>
-                </div>
-                <h2>{{ rep.name }}</h2>
-
-                {% if rep.num == 1 %}
-                    <p>{{ rep.num }} image</p>
-                {% else %}
-                    <p>{{ rep.num }} images</p>
-                {% endif %}
-            </div>
-            
-            {% endfor %}
-    {% else %}
-            <div class="emptyrep">
-                <img src="../static/icon/repFolder2DarkPurple.svg" alt="">
-                <h2>Nothing here to see :(</h2>
-                <h2>Create your first repository now!</h2>
-            </div>
-    {% endif %}
-    
+{# IMAGE-BOX #}
+<div class="image-box">
+    <div>
+        <h2>{{ rep.name }}</h2>
+        <p>{{ length }} images</p>
+    </div>
+    <div>
+        {% for image in images %}
+        <div class="card-img">
+            <img src="../{{ image.file }}" alt="">
+            <h3>{{ image.name }}</>
+        </div>
+        {% endfor %}
+    </div>
 </div>
+
 {% endblock %}

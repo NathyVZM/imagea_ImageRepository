@@ -14,7 +14,7 @@ class User(db.Model):
     lastname = db.Column(db.String(15))
     username = db.Column(db.String(20), primary_key=True, unique=True)
     password = db.Column(db.String(200))
-    repository = db.relationship('Repository')
+    repository = db.relationship('Repository', back_populates='usuario', cascade='all, delete')
 
     # CONSTRUCTOR
     def __init__(self, name, lastname, username, password):
@@ -39,9 +39,10 @@ class Repository(db.Model):
     __tablename__ = 'repositorio'
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), db.ForeignKey('usuario.username'))
+    username = db.Column(db.String(20), db.ForeignKey('usuario.username', ondelete='CASCADE'))
+    usuario = db.relationship('User', back_populates='repository')
     name = db.Column(db.String(20))
-    image = db.relationship('Image')
+    image = db.relationship('Image', cascade='all, delete')
 
     # CONSTRUCTOR
     def __init__(self, username, name):
@@ -54,8 +55,16 @@ class Image(db.Model):
     __tablename__ = 'imagen'
 
     id = db.Column(db.Integer, primary_key=True)
-    idRep = db.Column(db.Integer, db.ForeignKey('repositorio.id'))
+    repository = db.Column(db.Integer, db.ForeignKey('repositorio.id'))
     name = db.Column(db.String(20))
     description = db.Column(db.Text())
     file = db.Column(db.Text())
     tags = db.Column(db.ARRAY(db.String(20)))
+
+    # CONSTRUCTOR
+    def __init__(self, repository, name, description, file, tags):
+        self.repository = repository
+        self.name = name
+        self.description = description
+        self.file = file
+        self.tags = tags

@@ -1,9 +1,12 @@
 # app.py
 
 from flask import *
+from werkzeug.utils import secure_filename
 from config import *
 from forms import *
 from flask_wtf.csrf import CSRFProtect
+import os
+from sqlalchemy.sql.expression import func
 
 from models import db, User, Repository, Image
 
@@ -12,10 +15,11 @@ app.config.from_object(DevelopmentConfig)
 csrf = CSRFProtect()
 
 
-#* BEFORE_REQUEST
+# * BEFORE_REQUEST
 @app.before_request
 def before_request():
-    if 'username' not in session and request.endpoint in ['home', 'repository']:
+    if 'username' not in session and request.endpoint in ['home', 'repository', 'image_create', 'repository_create',
+    'view_repository']:
         return redirect(url_for('login'))
     elif 'username' in session and request.endpoint in ['register', 'login']:
         return redirect(url_for('home'))
@@ -74,7 +78,7 @@ def login():
     return render_template('login.html', title=title, form=loginForm)
 
 
-#* LOGOUT
+# * LOGOUT
 @app.route('/logout')
 def logout():
     if 'username' in session:
@@ -82,35 +86,59 @@ def logout():
     return redirect(url_for('login'))
 
 
-#* HOME
+# * HOME
 @app.route('/home')
 def home():
-    if 'username' in session:
-        username = session['username']
-        name = session['name']
-        print(username)
-        print(name)
+    images = Image.query.order_by(func.random()).all()
+    images_home = []
+
+    username = session['username']
     
+    for image in images:
+        rep = Repository.query.filter_by(id=image.repository).first()
+        user = User.query.filter_by(username=rep.username).first()
+
+        setattr(image, 'username', user.username)
+
+        if rep.username != username:
+            # images_home.append(Image(image.repository, image.name, image.description, image.file, image.tags))
+            images_home.append(image)
+        else:
+            continue
+
     title = 'imagea - Home'
     name = session['name']
-    return render_template('home.html', title=title, name=name)
+    return render_template('home.html', title=title, name=name, images=images_home)
 
 
-#* REPOSITORY
+# * REPOSITORY
 @app.route('/repository', methods=['GET'])
 def repository():
     repositoryForm = RepositoryForm(request.form)
+    username = session['username']
+
+    reps = Repository.query.filter_by(username=username).all()
+    
+    num_img = []
+
+    for rep in reps:
+        num = Image.query.join(Repository).filter(rep.id == Image.repository).count()
+        num_img.append(num)
+        setattr(rep, 'num', num)
+    
+    for num in num_img:
+        print(num)
 
     title = 'imagea - Repositories'
     name = session['name']
     lastname = session['lastname']
     username = session['username']
-    return render_template('repository.html', title=title, name=name, lastname=lastname, 
-    username=username, form=repositoryForm)
+    return render_template('repository.html', title=title, name=name, lastname=lastname,
+                           username=username, form=repositoryForm, reps=reps, num_img=num_img)
 
 
-#* REPOSITORY/CREATE
-@app.route('/repository/create', methods = ['POST'])
+# * REPOSITORY/CREATE
+@app.route('/repository/create', methods=['POST'])
 def repository_create():
     repositoryForm = RepositoryForm(request.form)
     print(repositoryForm.name.data)
@@ -122,6 +150,50 @@ def repository_create():
         db.session.add(rep)
         db.session.commit()
         print('Rep creado')
+
+    return redirect(url_for('repository'))
+
+
+#* REPOSITORY/<ID>
+@app.route('/repository/<int:id>')
+def view_repository(id):
+    repositoryForm = RepositoryForm(request.form)
+
+    images = Image.query.filter_by(repository=id).all()
+    rep = Repository.query.filter_by(id=id).first()
+
+    for image in images:
+        print(image.name, image.file)
+    
+    username = session['username']
+    reps = Repository.query.filter_by(username=username).all()
+    
+    title = 'imagea - View Repository'
+    return render_template('view_rep.html', images=images, title=title, name=session['name'],
+    lastname=session['lastname'], username=username, rep=rep, length=len(images), 
+    form=repositoryForm, reps=reps)
+
+
+#* IMAGE/CREATE
+@app.route('/image/create', methods=['POST'])
+def image_create():
+    tags = request.form['tags'].split(', ')
+    
+    file = request.files['file']
+    cwd = os.getcwd()
+    file.save(os.path.join(cwd, 'static', 'img', secure_filename(file.filename)))
+
+    abs = os.path.join(cwd, 'static', 'img', secure_filename(file.filename))
+    rel = os.path.relpath(abs)
+
+    image = Image(request.form['rep'], request.form['name'], request.form['description'],
+    rel, tags)
+    
+    print(image.repository)
+    print(image.file)
+
+    db.session.add(image)
+    db.session.commit()
 
     return redirect(url_for('repository'))
 

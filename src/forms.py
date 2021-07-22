@@ -2,6 +2,7 @@
 
 from wtforms import *
 from models import User
+from flask_wtf.file import *
 
 
 #* REGISTERFORM
@@ -62,3 +63,26 @@ class RepositoryForm(Form):
         "placeholder": "E.g.: Landscape, Handcraft, Cosplays",
         "title": "Insert the name of the repository"
     })
+
+
+#* IMAGEFORM
+# class ImageForm(Form):
+#     name = StringField('Image name', [validators.Required(message='Name is required')],
+#     render_kw={
+#         "placeholder": "Add a title",
+#         "title": "Add a title for the image to be displayed"
+#     })
+
+#     description = TextAreaField('Image description', render_kw={
+#         "placeholder": "Add a description",
+#         "title": "Add a description for the image"
+#     })
+
+#     file = FileField('File', validators=[FileRequired, FileAllowed(['jpg', 'png'], 'Images only')],
+#     render_kw={
+#         "placeholder": "Upload image",
+#         "title": "Upload the image file"
+#     })
+
+#     repository = SelectField('Repository', [validators.Required(message='repository is required')], 
+#     choices=[('rep1', 'Landscape'), ('rep2', 'Handcraft')])

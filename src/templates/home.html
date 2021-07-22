@@ -1,7 +1,15 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-    <h1>Home</h1>
+<div class="home-box">
+        {% for image in images %}
+        <div class="card-img">
+            <img src="../{{ image.file }}" alt="">
+            <h3>{{ image.name }}</h3>
+            <p>{{ image.username }}</p>
+        </div>
+        {% endfor %}
+</div>
 {% endblock %}
 
 
