@@ -10,7 +10,7 @@ from sqlalchemy.sql.expression import func
 
 from models import db, User, Repository, Image
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static/', static_url_path='/', template_folder='templates')
 app.config.from_object(DevelopmentConfig)
 csrf = CSRFProtect()
 
@@ -186,15 +186,16 @@ def image_create():
 
     abs = os.path.join(cwd, 'static', 'img', secure_filename(file.filename))
     rel = os.path.relpath(abs)
+    print(rel)
 
-    image = Image(request.form['rep'], request.form['name'], request.form['description'],
-    rel, tags)
+    # image = Image(request.form['rep'], request.form['name'], request.form['description'],
+    # rel, tags)
     
-    print(image.repository)
-    print(image.file)
+    # print(image.repository)
+    # print(image.file)
 
-    db.session.add(image)
-    db.session.commit()
+    # db.session.add(image)
+    # db.session.commit()
 
     return redirect(url_for('repository'))
 

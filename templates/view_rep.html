@@ -6,7 +6,7 @@
 {# PROFILE HEADER #}
 <div class="profile-header">
     <div>
-        <img src="../static/icon/userIcon.svg" alt="User Icon" id="user-icon">
+        <img src="/icon/userIcon.svg" alt="User Icon" id="user-icon">
         <h1>{{ name }} {{ lastname }}</h1>
         <h2>{{ username }}</h2>
     </div>
@@ -18,13 +18,13 @@
 
 {# CREATE-REP-FORM #}
 <div id="create-rep-form">
-    <img src="../static/icon/closePurple.svg" alt="" width="20" class="close" id="close">
+    <img src="/icon/closePurple.svg" alt="" width="20" class="close" id="close">
     <h2>Create repository</h2>
 
     <form action="/repository/create" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <label for="">
-            <img src="../static/icon/editPencil.svg" alt="">
+            <img src="/icon/editPencil.svg" alt="">
             Repository name
         </label>
         {{ renderField(form.name) }}
@@ -35,7 +35,7 @@
 
 {# ADD-IMAGE-FORM #}
 <div id="add-image-form">
-    <img src="../static/icon/closePurple.svg" alt="close" class="close">
+    <img src="/icon/closePurple.svg" alt="close" class="close">
     <h2>Add image</h2>
 
     {# FORM #}
@@ -52,14 +52,14 @@
         title="Add a description for the image"></textarea>
 
         <div class="tagIcon">
-            <img src="../static/icon/tagIcon.svg" alt="">
+            <img src="/icon/tagIcon.svg" alt="">
             <span>Tags</span>
         </div>
         <p>Add tagnames followed by a comma</p>
         <input type="text" placeholder="E.g.: landscape, flower, garden" name="tags" required>
 
         <div class="repIcon">
-            <img src="../static/icon/repositoryIcon.svg" alt="">
+            <img src="/icon/repositoryIcon.svg" alt="">
             <span>Repository</span>
         </div>
         
