@@ -6,6 +6,7 @@ from config import *
 from forms import *
 from flask_wtf.csrf import CSRFProtect
 import os
+import asyncio
 from sqlalchemy.sql.expression import func
 
 from models import db, User, Repository, Image
@@ -56,7 +57,7 @@ def register():
 
 # * LOGIN
 @app.route('/login', methods=['GET', 'POST'])
-def login():
+async def login():
     loginForm = LoginForm(request.form)
     print(loginForm.username.data)
     print(loginForm.password.data)
@@ -64,7 +65,7 @@ def login():
     if request.method == 'POST' and loginForm.validate():
         username = loginForm.username.data
         password = loginForm.password.data
-        user = User.query.filter_by(username=username).first()
+        user = await User.query.filter_by(username=username).first()
 
         if user is not None and user.verifyPassword(password):
             print(f'Welcome {username}')
@@ -89,15 +90,15 @@ def logout():
 
 # * HOME
 @app.route('/home')
-def home():
-    images = Image.query.order_by(func.random()).all()
+async def home():
+    images = await Image.query.order_by(func.random()).all()
     images_home = []
 
     username = session['username']
     
     for image in images:
-        rep = Repository.query.filter_by(id=image.repository).first()
-        user = User.query.filter_by(username=rep.username).first()
+        rep = await Repository.query.filter_by(id=image.repository).first()
+        user = await User.query.filter_by(username=rep.username).first()
 
         setattr(image, 'username', user.username)
 
