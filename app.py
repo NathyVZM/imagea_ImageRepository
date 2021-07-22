@@ -69,7 +69,7 @@ def register():
 
 # * LOGIN
 @app.route('/login', methods=['GET', 'POST'])
-async def login():
+def login():
     loginForm = LoginForm(request.form)
     print(loginForm.username.data)
     print(loginForm.password.data)
@@ -103,7 +103,7 @@ def logout():
 
 # * HOME
 @app.route('/home')
-async def home():
+def home():
     images = Image.query.order_by(func.random()).all()
     # images = await async_home_image()
     images_home = []
