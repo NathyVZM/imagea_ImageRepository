@@ -249,6 +249,8 @@ def user_edit():
 
     db.session.commit()
     session['username'] = username_new
+    session['name'] = name
+    session['lastname'] = lastname
 
     print(name, lastname, username_new)
 
