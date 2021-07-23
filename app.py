@@ -16,11 +16,24 @@ app.config.from_object(DevelopmentConfig)
 csrf = CSRFProtect(app)
 
 
+#* MIDDLEWARE - createFolder()
+def createFolder():
+    cwd = os.getcwd()
+    path = os.path.join(cwd, 'static', 'img')
+
+    if(os.path.isdir(path)):
+        print(f'{path} exists')
+    else:
+        print(f'creating {path}')
+        os.mkdir(path)
+
+
 # * BEFORE_REQUEST
 @app.before_request
 def before_request():
     if 'username' not in session and request.endpoint in ['home', 'repository', 'image_create', 'repository_create',
-                                                          'view_repository', 'image_search', 'user_edit_view']:
+                                                          'view_repository', 'image_search', 'user_edit_view', 'user_edit',
+                                                          'user_delete']:
         return redirect(url_for('login'))
     elif 'username' in session and request.endpoint in ['register', 'login']:
         return redirect(url_for('home'))
@@ -177,7 +190,7 @@ def image_create():
     print(rel)
 
     image = Image(request.form['rep'], request.form['name'], request.form['description'],
-                  file.filename, tags)
+                  secure_filename(file.filename), tags)
 
     print(image.repository)
     print(image.file)
@@ -270,5 +283,6 @@ if __name__ == '__main__':
     csrf.init_app(app)
     with app.app_context():
         db.create_all()
-
+    
+    createFolder()
     app.run()
