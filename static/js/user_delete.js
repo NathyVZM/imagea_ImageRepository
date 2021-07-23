@@ -10,18 +10,17 @@ if(user_delete) {
 
         data = {'username': username.value}
 
-        // fetch('/user/delete', {
-        //     method: 'POST',
-        //     body: JSON.stringify(data)
-        // }).then(response => {
-        //     return response.json()
-        // }).then(data => {
-        //     console.log(data)
+        fetch('/user/delete', {
+            method: 'DELETE'
+        }).then(response => {
+            return response.json()
+        }).then(data => {
+            console.log(data)
 
-        //     if(data.status == 200) {
-        //         window.location.href = '/logout'
-        //     }
-        // })
+            if(data.status == 200) {
+                window.location.href = '/logout'
+            }
+        })
     }
 
     user_delete.onclick = user_delete_action

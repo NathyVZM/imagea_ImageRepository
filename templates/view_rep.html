@@ -48,8 +48,8 @@
         </div>
 
         <input type="text" placeholder="Add a title" title="Add a title for the image" name="name" required>
-        <textarea name="description" id="" placeholder="Add a description" 
-        title="Add a description for the image"></textarea>
+        <textarea name="description" id="" placeholder="Add a description"
+            title="Add a description for the image"></textarea>
 
         <div class="tagIcon">
             <img src="/icon/tagIcon.svg" alt="">
@@ -62,13 +62,13 @@
             <img src="/icon/repositoryIcon.svg" alt="">
             <span>Repository</span>
         </div>
-        
+
         <select name="rep" id="rep-list" required>
             {% if reps %}
-                {% for rep in reps %}
-                        <option value="{{ rep.id }}">{{ rep.name }}</option>
-                {% endfor %}
-        {% endif %}
+            {% for rep in reps %}
+            <option value="{{ rep.id }}">{{ rep.name }}</option>
+            {% endfor %}
+            {% endif %}
         </select>
 
         <button type="submit" class="button">Add image</button>
@@ -76,6 +76,7 @@
 </div>
 
 {# IMAGE-BOX #}
+{% if images %}
 <div class="image-box">
     <div>
         <h2>{{ rep.name }}</h2>
@@ -90,5 +91,13 @@
         {% endfor %}
     </div>
 </div>
+{% else %}
+<div class="emptyrep">
+    <img src="/icon/repFolder2DarkPurple.svg" alt="">
+    <h2>Nothing here to see :(</h2>
+    <h2>Start adding images to your repositories!</h2>
+</div>
+{% endif %}
+
 
 {% endblock %}

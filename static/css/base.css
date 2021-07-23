@@ -185,6 +185,11 @@ header {
 #panel a {
     color: white;
     font-size: 1em;
+    transition: text-shadow 0.2s ease-in-out 0s;
+}
+
+#panel a:hover {
+    text-shadow: 0px 0px 15px var(--gx-thistle);
 }
 
 /** MAIN */
@@ -602,8 +607,8 @@ main {
 }
 
 .emptyrep img {
-    width: 25%;
-    margin-bottom: 3%;
+    width: 20%;
+    margin-bottom: 2%;
 }
 
 .emptyrep h2 {
@@ -718,7 +723,7 @@ main {
     flex-flow: row wrap;
     padding: 3% 2%;
     width: 85%;
-    border-bottom: 1px solid var(--gx-thistle);
+    border-bottom: 2px solid var(--gx-english-violet);
 }
 
 .user-header img{
@@ -741,7 +746,7 @@ main {
     width: 80%;
     padding: 2% 2% 6% 2%;
     margin-top: 2%;
-    border-bottom: 1px solid var(--gx-thistle);
+    border-bottom: 2px solid var(--gx-english-violet);
 }
 
 .user-form dd {

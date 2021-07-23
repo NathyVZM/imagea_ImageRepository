@@ -1,8 +1,6 @@
 # app.py
 
-from collections import namedtuple
 from flask import *
-from sqlalchemy.sql.selectable import LABEL_STYLE_TABLENAME_PLUS_COL
 from werkzeug.utils import secure_filename
 from config import *
 from forms import *
@@ -56,19 +54,6 @@ def register():
     title = 'imagea - Register'
     return render_template('register.html', title=title, form=registerForm)
 
-# #! PRUEBA
-# async def async_login(username):
-#     await User.query.filter_by(username=username).first()
-
-# async def async_home_image():
-#     await Image.query.order_by(func.random()).all()
-
-# async def async_home_rep(rep):
-#     await Repository.query.filter_by(id=rep).first()
-
-# async def async_home_user(username):
-#     await User.query.filter_by(username=username).first()
-
 
 # * LOGIN
 @app.route('/login', methods=['GET', 'POST'])
@@ -111,29 +96,6 @@ def home():
     images = db.session.query(Image.name, Image.file, User.username).filter(
     Image.repository == Repository.id).filter(Repository.username == User.username).filter(
     User.username != username).order_by(func.random()).all()
-
-    # images = Image.query.order_by(func.random()).all()
-    # images_home = []
-
-    # username = session['username']
-
-    # prueba = db.session.query(Image.name, Image.file, User.username).filter(
-    #     Image.repository == Repository.id).filter(Repository.username == User.username).filter(
-    #         User.username != username).all()
-    
-    # for p in prueba:
-    #     print(p)
-
-    # for image in images:
-    #     rep = Repository.query.filter_by(id=image.repository).first()
-    #     user = User.query.filter_by(username=rep.username).first()
-
-    #     setattr(image, 'username', user.username)
-
-    #     if rep.username != username:
-    #         images_home.append(image)
-    #     else:
-    #         continue
 
     title = 'imagea - Home'
     name = session['name']
@@ -287,7 +249,8 @@ def user_edit():
 
 
 #* USER/DELETE
-@app.route('/user/delete', methods=['POST'])
+@csrf.exempt
+@app.route('/user/delete', methods=['DELETE'])
 def user_delete():
     username = session['username']
 
@@ -295,7 +258,19 @@ def user_delete():
     db.session.delete(user)
     db.session.commit()
 
-    return redirect(url_for('logout'))
+    return { 'status': 200, 'user': {
+        'name': user.name,
+        'lastname': user.lastname,
+        'username': user.username,
+        'password': user.password
+    }}
+
+
+#* PRUEBA DELETE
+# @csrf.exempt
+# @app.route('/user/edit', methods=['DELETE'])
+# def prueba():
+#     return { 'message': 'DELETE' }
 
 
 # * APP.RUN()

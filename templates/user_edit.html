@@ -40,9 +40,6 @@
             <img src="/icon/deleteIcon.svg" alt="">
             <h3>Delete account</h3>
         </div>
-        <form action="/user/delete" method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <button type="submit" id="delete">Delete</button>
-        </form>
+        <button type="button" id="delete">Delete</button>
     </div>
 {% endblock %}
