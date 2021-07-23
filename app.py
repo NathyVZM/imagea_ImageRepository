@@ -266,13 +266,6 @@ def user_delete():
     }}
 
 
-#* PRUEBA DELETE
-# @csrf.exempt
-# @app.route('/user/edit', methods=['DELETE'])
-# def prueba():
-#     return { 'message': 'DELETE' }
-
-
 # * APP.RUN()
 db.init_app(app)
 if __name__ == '__main__':
