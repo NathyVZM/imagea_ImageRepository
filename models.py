@@ -39,10 +39,10 @@ class Repository(db.Model):
     __tablename__ = 'repositorio'
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), db.ForeignKey('usuario.username', ondelete='CASCADE'))
+    username = db.Column(db.String(20), db.ForeignKey('usuario.username', ondelete='CASCADE', onupdate='CASCADE'))
     usuario = db.relationship('User', back_populates='repository')
     name = db.Column(db.String(20))
-    image = db.relationship('Image', cascade='all, delete')
+    image = db.relationship('Image', back_populates='rep', cascade='all, delete')
 
     # CONSTRUCTOR
     def __init__(self, username, name):
@@ -55,8 +55,9 @@ class Image(db.Model):
     __tablename__ = 'imagen'
 
     id = db.Column(db.Integer, primary_key=True)
-    repository = db.Column(db.Integer, db.ForeignKey('repositorio.id'))
-    name = db.Column(db.String(20))
+    repository = db.Column(db.Integer, db.ForeignKey('repositorio.id', ondelete='CASCADE', onupdate='CASCADE'))
+    rep = db.relationship('Repository', back_populates='image')
+    name = db.Column(db.String(100))
     description = db.Column(db.Text())
     file = db.Column(db.Text())
     tags = db.Column(db.ARRAY(db.String(20)))

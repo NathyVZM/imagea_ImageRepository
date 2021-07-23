@@ -16,7 +16,8 @@
         </div>
         <div id="segundo">
             <a href="/home">Home</a>
-            <form action="">
+            <form action="/image/search" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <input type="text" name="search" placeholder="Search by tags">
                 <button type="submit">Search</button>
             </form>
@@ -28,12 +29,18 @@
         </div>
     </header>
 
+    <div id="panel">
+        <img src="/icon/closePurple.svg" alt="" class="close">
+        <a href="/user/edit">Edit profile</a>
+        <a href="/logout">Log out</a>
+    </div>
+
     <main>
         {% block content %}{% endblock %}
     </main>
     
     <script src="/js/open_close.js"></script>
     <script src="/js/input_file.js"></script>
-    <script src="/js/view_rep.js"></script>
+    <script src="/js/user_update.js"></script>
 </body>
 </html>

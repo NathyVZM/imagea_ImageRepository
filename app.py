@@ -1,6 +1,7 @@
 # app.py
 
 from flask import *
+from sqlalchemy.sql.selectable import LABEL_STYLE_TABLENAME_PLUS_COL
 from werkzeug.utils import secure_filename
 from config import *
 from forms import *
@@ -10,8 +11,9 @@ from sqlalchemy.sql.expression import func
 
 from models import db, User, Repository, Image
 
-app = Flask(__name__, static_folder='static/', static_url_path='/', template_folder='templates')
-app.config.from_object(ProductionConfig)
+app = Flask(__name__, static_folder='static/',
+            static_url_path='/', template_folder='templates')
+app.config.from_object(DevelopmentConfig)
 csrf = CSRFProtect(app)
 
 
@@ -19,7 +21,7 @@ csrf = CSRFProtect(app)
 @app.before_request
 def before_request():
     if 'username' not in session and request.endpoint in ['home', 'repository', 'image_create', 'repository_create',
-    'view_repository']:
+                                                          'view_repository', 'image_search', 'user_edit_view']:
         return redirect(url_for('login'))
     elif 'username' in session and request.endpoint in ['register', 'login']:
         return redirect(url_for('home'))
@@ -78,7 +80,6 @@ def login():
         username = loginForm.username.data
         password = loginForm.password.data
         user = User.query.filter_by(username=username).first()
-        # user = await async_login(username)
 
         if user is not None and user.verifyPassword(password):
             print(f'Welcome {username}')
@@ -104,28 +105,38 @@ def logout():
 # * HOME
 @app.route('/home')
 def home():
-    images = Image.query.order_by(func.random()).all()
-    # images = await async_home_image()
-    images_home = []
-
     username = session['username']
+
+    images = db.session.query(Image.name, Image.file, User.username).filter(
+    Image.repository == Repository.id).filter(Repository.username == User.username).filter(
+    User.username != username).order_by(func.random()).all()
+
+    # images = Image.query.order_by(func.random()).all()
+    # images_home = []
+
+    # username = session['username']
+
+    # prueba = db.session.query(Image.name, Image.file, User.username).filter(
+    #     Image.repository == Repository.id).filter(Repository.username == User.username).filter(
+    #         User.username != username).all()
     
-    for image in images:
-        rep = Repository.query.filter_by(id=image.repository).first()
-        # rep = await async_home_rep(image.repository)
-        user = User.query.filter_by(username=rep.username).first()
-        # user = await async_home_user(rep.username)
+    # for p in prueba:
+    #     print(p)
 
-        setattr(image, 'username', user.username)
+    # for image in images:
+    #     rep = Repository.query.filter_by(id=image.repository).first()
+    #     user = User.query.filter_by(username=rep.username).first()
 
-        if rep.username != username:
-            images_home.append(image)
-        else:
-            continue
+    #     setattr(image, 'username', user.username)
+
+    #     if rep.username != username:
+    #         images_home.append(image)
+    #     else:
+    #         continue
 
     title = 'imagea - Home'
     name = session['name']
-    return render_template('home.html', title=title, name=name, images=images_home)
+    return render_template('home.html', title=title, name=name, images=images)
 
 
 # * REPOSITORY
@@ -135,14 +146,15 @@ def repository():
     username = session['username']
 
     reps = Repository.query.filter_by(username=username).all()
-    
+
     num_img = []
 
     for rep in reps:
-        num = Image.query.join(Repository).filter(rep.id == Image.repository).count()
+        num = Image.query.join(Repository).filter(
+            rep.id == Image.repository).count()
         num_img.append(num)
         setattr(rep, 'num', num)
-    
+
     for num in num_img:
         print(num)
 
@@ -171,7 +183,7 @@ def repository_create():
     return redirect(url_for('repository'))
 
 
-#* REPOSITORY/<ID>
+# * REPOSITORY/<ID>
 @app.route('/repository/<int:id>')
 def view_repository(id):
     repositoryForm = RepositoryForm(request.form)
@@ -179,34 +191,32 @@ def view_repository(id):
     images = Image.query.filter_by(repository=id).all()
     rep = Repository.query.filter_by(id=id).first()
 
-    for image in images:
-        print(image.name, image.file)
-    
     username = session['username']
     reps = Repository.query.filter_by(username=username).all()
-    
+
     title = 'imagea - View Repository'
     return render_template('view_rep.html', images=images, title=title, name=session['name'],
-    lastname=session['lastname'], username=username, rep=rep, length=len(images), 
-    form=repositoryForm, reps=reps)
+                           lastname=session['lastname'], username=username, length=len(images),
+                           form=repositoryForm, reps=reps, rep=rep)
 
 
-#* IMAGE/CREATE
+# * IMAGE/CREATE
 @app.route('/image/create', methods=['POST'])
 def image_create():
     tags = request.form['tags'].split(', ')
-    
+
     file = request.files['file']
     cwd = os.getcwd()
-    file.save(os.path.join(cwd, 'static', 'img', secure_filename(file.filename)))
+    file.save(os.path.join(cwd, 'static', 'img',
+              secure_filename(file.filename)))
 
     abs = os.path.join(cwd, 'static', 'img', secure_filename(file.filename))
     rel = os.path.relpath(abs)
     print(rel)
 
     image = Image(request.form['rep'], request.form['name'], request.form['description'],
-    file.filename, tags)
-    
+                  file.filename, tags)
+
     print(image.repository)
     print(image.file)
 
@@ -214,6 +224,57 @@ def image_create():
     db.session.commit()
 
     return redirect(url_for('repository'))
+
+
+#* IMAGE/SEARCH
+@app.route('/image/search', methods=['POST'])
+def image_search():
+    search = request.form['search']
+
+    images = db.session.query(Image.name, Image.file, User.username).filter(Image.tags.any(search)).filter(
+    Image.repository == Repository.id).filter(Repository.username==User.username).all()
+
+    title = 'imagea - Search'
+    name = session['name']
+    return render_template('search.html', images=images, name=name, title=title)
+
+
+#* USER/EDIT - GET
+@app.route('/user/edit', methods=['GET'])
+def user_edit_view():
+    username = session['username']
+    user = User.query.filter_by(username=username).first()
+    
+    userForm = UserForm(request.form)
+    userForm.name.data = user.name
+    userForm.lastname.data = user.lastname
+    userForm.username.data = user.username
+    userForm.password.data = user.password
+
+    title = 'imagea - Edit User'
+    name = session['name']
+    print(name)
+    return render_template('user_edit.html', user=user, form=userForm, name=name, title=title)
+
+
+#* USER/EDIT - PUT
+@app.route('/user/edit', methods=['PUT'])
+def user_edit():
+    username = session['username']
+
+    name = request.form['name']
+    lastname = request.form['lastname']
+    username_new = request.form['username']
+    password = request.form['password']
+
+    print(name, lastname, username_new, password)
+
+    return { 'user': {
+        'name': name,
+        'lastname': lastname,
+        'username': username_new,
+        'password': password
+    }}
 
 
 # * APP.RUN()

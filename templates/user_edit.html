@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% from 'macro.html' import renderField %}
+
+    <div class="user-header">
+        <img src="/icon/userIcon.svg" alt="">
+        <h1>Edit profile</h1>
+    </div>
+    <form action="" method="POST" class="user-form" id="userForm">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div>
+            <img src="/icon/editPencil.svg" alt="">
+            <p>Name</p>
+        </div>
+        {{ renderField(form.name) }}
+
+        <div>
+            <img src="/icon/editPencil.svg" alt="">
+            <p>Lastname</p>
+        </div>
+        {{ renderField(form.lastname) }}
+
+        <div>
+            <img src="/icon/userEdit.svg" alt="">
+            <p>Username</p>
+        </div>
+        {{ renderField(form.username) }}
+
+        <div>
+            <img src="/icon/lockIcon.svg" alt="">
+            <p>Password</p>
+        </div>
+        {{ renderField(form.password) }}
+
+        <button type="button" id="update">Save</button>
+    </form>
+    <div class="user-delete">
+        <div>
+            <img src="/icon/deleteIcon.svg" alt="">
+            <h3>Delete account</h3>
+        </div>
+        <button type="button">Delete</button>
+    </div>
+{% endblock %}
