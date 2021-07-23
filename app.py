@@ -35,7 +35,6 @@ def index():
 # * REGISTER
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    # return 'Hola Mundo'
     registerForm = RegisterForm(request.form)
     print(registerForm.name.data)
     print(registerForm.lastname.data)
@@ -230,7 +229,6 @@ def user_edit():
     name = request.form['name']
     lastname = request.form['lastname']
     username_new = request.form['username']
-    # password = request.form['password']
 
     user.name = name
     user.lastname = lastname
@@ -270,7 +268,6 @@ def user_delete():
 db.init_app(app)
 if __name__ == '__main__':
     csrf.init_app(app)
-    # db.init_app(app)
     with app.app_context():
         db.create_all()
 
