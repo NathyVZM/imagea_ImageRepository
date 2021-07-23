@@ -1,4 +1,4 @@
-//view_rep.js
+//user_update.js
 
 let update = document.getElementById('update')
 
@@ -21,9 +21,9 @@ if (update) {
         }).then(data => {
             console.log(data)
 
-            // if(data.status == 200){
-            //     window.location.href = '/repository'
-            // }
+            if(data.status == 200){
+                window.location.href = '/repository'
+            }
         })
     }
 

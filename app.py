@@ -1,5 +1,6 @@
 # app.py
 
+from collections import namedtuple
 from flask import *
 from sqlalchemy.sql.selectable import LABEL_STYLE_TABLENAME_PLUS_COL
 from werkzeug.utils import secure_filename
@@ -262,19 +263,39 @@ def user_edit_view():
 def user_edit():
     username = session['username']
 
+    user = User.query.get(username)
+
     name = request.form['name']
     lastname = request.form['lastname']
     username_new = request.form['username']
-    password = request.form['password']
+    # password = request.form['password']
 
-    print(name, lastname, username_new, password)
+    user.name = name
+    user.lastname = lastname
+    user.username = username_new
 
-    return { 'user': {
+    db.session.commit()
+    session['username'] = username_new
+
+    print(name, lastname, username_new)
+
+    return { 'status': 200, 'user': {
         'name': name,
         'lastname': lastname,
         'username': username_new,
-        'password': password
     }}
+
+
+#* USER/DELETE
+@app.route('/user/delete', methods=['POST'])
+def user_delete():
+    username = session['username']
+
+    user = User.query.get(username)
+    db.session.delete(user)
+    db.session.commit()
+
+    return redirect(url_for('logout'))
 
 
 # * APP.RUN()

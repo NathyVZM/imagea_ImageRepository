@@ -27,11 +27,11 @@
         </div>
         {{ renderField(form.username) }}
 
-        <div>
+        {#<div>
             <img src="/icon/lockIcon.svg" alt="">
             <p>Password</p>
         </div>
-        {{ renderField(form.password) }}
+        {{ renderField(form.password) }}#}
 
         <button type="button" id="update">Save</button>
     </form>
@@ -40,6 +40,9 @@
             <img src="/icon/deleteIcon.svg" alt="">
             <h3>Delete account</h3>
         </div>
-        <button type="button">Delete</button>
+        <form action="/user/delete" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" id="delete">Delete</button>
+        </form>
     </div>
 {% endblock %}
