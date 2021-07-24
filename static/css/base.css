@@ -419,6 +419,8 @@ main {
     box-shadow: inset 0px 0px 0px 3px var(--gx-english-violet);
     box-sizing: border-box;
     overflow-wrap: break-word;
+    word-wrap: break-word;
+    overflow: auto;
 }
 
 .inputfile{
@@ -428,6 +430,8 @@ main {
     overflow: hidden;
     position: absolute;
     z-index: -1;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .inputfile + label {
@@ -442,6 +446,7 @@ main {
     border-radius: 10px;
     float: left;
     overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .inputfile:focus + label, .inputfile + label:hover {
@@ -698,6 +703,16 @@ main {
     color: var(--gx-thistle);
     flex: 1;
     margin-top: 10%;
+}
+
+.card-img > div {
+    margin-top: 2%;
+}
+
+.card-img span {
+    color: var(--gx-english-violet);
+    font-family: raleway;
+    font-size: 0.9em;
 }
 
 .home-box {

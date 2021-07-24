@@ -105,7 +105,7 @@ def logout():
 def home():
     username = session['username']
 
-    images = db.session.query(Image.name, Image.file, User.username).filter(
+    images = db.session.query(Image.name, Image.file, User.username, Image.tags).filter(
     Image.repository == Repository.id).filter(Repository.username == User.username).filter(
     User.username != username).order_by(func.random()).all()
 
@@ -206,7 +206,7 @@ def image_create():
 def image_search():
     search = request.form['search']
 
-    images = db.session.query(Image.name, Image.file, User.username).filter(Image.tags.any(search)).filter(
+    images = db.session.query(Image.name, Image.file, User.username, Image.tags).filter(Image.tags.any(search)).filter(
     Image.repository == Repository.id).filter(Repository.username==User.username).all()
 
     title = 'imagea - Search'

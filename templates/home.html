@@ -8,6 +8,12 @@
             <img src="/img/{{ image.file }}" alt="">
             <h3>{{ image.name }}</h3>
             <p>{{ image.username }}</p>
+            <div>
+                <span>|</span>
+                {% for tag in image.tags %}
+                        <span>{{ tag }} | </span>
+                {% endfor %}
+            </div>
         </div>
         {% endfor %}
     {% else %}
