@@ -1,5 +1,6 @@
 # forms.py
 
+from sqlalchemy.sql.functions import user
 from wtforms import *
 from models import User
 from flask_wtf.file import *
@@ -37,7 +38,7 @@ class RegisterForm(Form):
 
         user = User.query.filter_by(username = username).first()
         if user is not None:
-             raise validators.ValidationError('El username ya se encuentra registrado')
+             raise validators.ValidationError('Username already registered')
 
 
 
@@ -93,4 +94,4 @@ class UserForm(Form):
 
         user = User.query.filter_by(username = username).first()
         if user is not None:
-             raise validators.ValidationError('El username ya se encuentra registrado')
+             raise validators.ValidationError('Username already registered')

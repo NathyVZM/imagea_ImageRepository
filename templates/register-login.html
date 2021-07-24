@@ -10,6 +10,15 @@
 </head>
 <body>
     <header></header>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="error">
+            <p>{{ message }}</p>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
     <main>
         <div id="izquierda">
             <h1>Register or Log in and start creating your own images repositories</h1>

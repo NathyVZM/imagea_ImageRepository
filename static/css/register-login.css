@@ -199,6 +199,21 @@ main {
     width: 8%;
 }
 
+.error {
+    background-color: var(--gx-crimson);
+    color: white;
+    padding: 1%;
+}
+
+.field-error {
+    list-style: none;
+    background-color: aqua;
+    padding: 2% 5%;
+    border-radius: 10px;
+    background-color: var(--gx-crimson);
+    color: white;
+}
+
 /** MISCELANEO */
 
 /* Uni Neue */

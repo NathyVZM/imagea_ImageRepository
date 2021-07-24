@@ -61,6 +61,9 @@ def register():
         db.session.add(user)
         db.session.commit()
 
+        successMessage = 'User Registered Successfully'
+        flash(successMessage)
+
         return redirect(url_for('login'))
 
     title = 'imagea - Register'
@@ -86,6 +89,8 @@ def login():
             session['lastname'] = user.lastname
             return redirect(url_for('home'))
         else:
+            error_message = 'Username or Password not valid'
+            flash(error_message)
             print('username or password not valid')
 
     title = 'imagea - Login'
@@ -237,11 +242,11 @@ def user_edit_view():
 def user_edit():
     username = session['username']
 
-    user = User.query.get(username)
-
     name = request.form['name']
     lastname = request.form['lastname']
     username_new = request.form['username']
+
+    user = User.query.get(username)
 
     user.name = name
     user.lastname = lastname
@@ -259,6 +264,7 @@ def user_edit():
         'lastname': lastname,
         'username': username_new,
     }}
+    
 
 
 #* USER/DELETE
